@@ -6,15 +6,20 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { catchError, EMPTY, finalize, map, switchMap, tap } from 'rxjs';
 import { UserService } from '../../user.service';
 import { ReqResUser } from '../../user.types';
+import {
+  LoadingSkeleton,
+  LoadingSkeletonType,
+} from '@shared/components/loading-skeleton/loading-skeleton';
 
 @Component({
   selector: 'app-user-details',
-  imports: [TranslocoModule, NgOptimizedImage],
+  imports: [TranslocoModule, NgOptimizedImage, LoadingSkeleton],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-details.html',
   styleUrl: './user-details.css',
 })
 export class UserDetails {
+  readonly loadingSkeletonType = LoadingSkeletonType;
   private readonly route = inject(ActivatedRoute);
   private readonly userService = inject(UserService);
   private readonly location = inject(Location);

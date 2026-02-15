@@ -1,0 +1,47 @@
+<div
+  class="flex items-center gap-2"
+  role="navigation"
+  [attr.aria-label]="'pagination.navAria' | transloco"
+>
+  <button
+    type="button"
+    (click)="onPrevious()"
+    [disabled]="!canGoPrevious()"
+    class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-[#415582] dark:text-slate-100 dark:hover:bg-[#24355c]"
+    [attr.aria-label]="'pagination.previousAria' | transloco"
+  >
+    {{ 'common.actions.previous' | transloco }}
+  </button>
+
+  @for (pageNumber of pageNumbers(); track trackByPageNumber($index, pageNumber)) {
+    @if (pageNumber === currentPage()) {
+      <button
+        type="button"
+        class="rounded-lg bg-[#d98667] px-3 py-2 text-sm font-semibold text-white"
+        [attr.aria-current]="'page'"
+        [attr.aria-label]="'pagination.currentPageAria' | transloco: { page: pageNumber }"
+      >
+        {{ pageNumber }}
+      </button>
+    } @else {
+      <button
+        type="button"
+        (click)="onGoToPage(pageNumber)"
+        class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-100 dark:border-[#415582] dark:text-slate-100 dark:hover:bg-[#24355c]"
+        [attr.aria-label]="'pagination.goToPageAria' | transloco: { page: pageNumber }"
+      >
+        {{ pageNumber }}
+      </button>
+    }
+  }
+
+  <button
+    type="button"
+    (click)="onNext()"
+    [disabled]="!canGoNext()"
+    class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-[#415582] dark:text-slate-100 dark:hover:bg-[#24355c]"
+    [attr.aria-label]="'pagination.nextAria' | transloco"
+  >
+    {{ 'common.actions.next' | transloco }}
+  </button>
+</div>

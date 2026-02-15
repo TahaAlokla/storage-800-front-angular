@@ -1,16 +1,16 @@
 <main
-  class="min-h-[calc(100vh-0px)] bg-[var(--mat-sys-surface)] px-4 py-6 text-[var(--mat-sys-on-surface)] sm:px-6"
+  class="min-h-[calc(100vh-0px)] bg-slate-50 px-4 py-6 text-slate-900 dark:bg-[#121a2f] dark:text-slate-100 sm:px-6"
 >
   <section class="mx-auto w-full max-w-6xl">
     <header class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <h1 class="text-2xl font-semibold tracking-tight">{{ 'users.list.title' | transloco }}</h1>
-        <p class="text-sm text-[var(--mat-sys-on-surface-variant)]">
+        <p class="text-sm text-slate-600 dark:text-slate-300">
           {{ 'users.list.subtitle' | transloco }}
         </p>
       </div>
 
-      <p class="text-sm text-[var(--mat-sys-on-surface-variant)]">
+      <p class="text-sm text-slate-600 dark:text-slate-300">
         @if (total() > 0) {
           {{
             'users.list.summary'
@@ -24,7 +24,7 @@
 
     @if (errorMessage()) {
       <div
-        class="mb-4 rounded-xl border border-[var(--mat-sys-error)] bg-[var(--mat-sys-surface-container)] px-4 py-3 text-sm text-[var(--mat-sys-error)]"
+        class="mb-4 rounded-xl border border-red-500 bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
         role="alert"
       >
         {{ errorMessage()! | transloco }}
@@ -32,89 +32,78 @@
     }
 
     <div
-      class="rounded-2xl border border-[var(--mat-sys-outline-variant)] bg-[var(--mat-sys-surface-container-low)] shadow-sm"
+      class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#313f63] dark:bg-[#1a2442] dark:shadow-[0_18px_36px_rgba(0,0,0,0.28)]"
     >
       @if (isLoading()) {
-        <div class="p-8 text-center text-sm text-[var(--mat-sys-on-surface-variant)]">
-          {{ 'users.list.loading' | transloco }}
+        <div class="p-4">
+          <app-loading-skeleton
+            [type]="loadingSkeletonType.UserCard"
+            [count]="perPage()"
+          ></app-loading-skeleton>
+          <p class="sr-only">{{ 'users.list.loading' | transloco }}</p>
         </div>
-      } @else if (users().length === 0) {
-        <div class="p-8 text-center text-sm text-[var(--mat-sys-on-surface-variant)]">
+      } @else if (filteredUsers().length === 0) {
+        <div class="p-8 text-center text-sm text-slate-600 dark:text-slate-400">
           {{ 'users.list.empty' | transloco }}
         </div>
       } @else {
         <div class="grid gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
-          @for (user of users(); track trackUserById($index, user)) {
+          @for (user of filteredUsers(); track trackUserById($index, user)) {
             <app-user-card [user]="user"></app-user-card>
           }
         </div>
       }
 
       <footer
-        class="flex flex-col gap-4 border-t border-[var(--mat-sys-outline-variant)] px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
+        class="flex flex-col gap-4 border-t border-slate-200 px-4 py-4 dark:border-[#313f63] sm:flex-row sm:items-center sm:justify-between"
       >
-        <div
-          class="flex items-center gap-2"
-          role="navigation"
-          [attr.aria-label]="'users.list.pagination.navAria' | transloco"
-        >
-          <button
-            type="button"
-            (click)="goToPreviousPage()"
-            [disabled]="!canGoPrevious()"
-            class="rounded-lg border border-[var(--mat-sys-outline-variant)] px-3 py-2 text-sm font-medium transition hover:bg-[var(--mat-sys-surface-container)] disabled:cursor-not-allowed disabled:opacity-50"
-            [attr.aria-label]="'users.list.pagination.previousAria' | transloco"
-          >
-            {{ 'common.actions.previous' | transloco }}
-          </button>
+        <div class="flex items-center gap-4">
+          <app-pagination
+            [currentPage]="currentPage()"
+            [totalPages]="totalPages()"
+            [isLoading]="isLoading()"
+            [canGoPrevious]="canGoPrevious()"
+            [canGoNext]="canGoNext()"
+            [pageNumbers]="pageNumbers()"
+            (previousPage)="goToPreviousPage()"
+            (nextPage)="goToNextPage()"
+            (goToPage)="goToPage($event)"
+          ></app-pagination>
 
-          @for (pageNumber of pageNumbers(); track trackPage($index, pageNumber)) {
-            @if (pageNumber === currentPage()) {
-              <button
-                type="button"
-                class="rounded-lg bg-[var(--mat-sys-primary)] px-3 py-2 text-sm font-semibold text-[var(--mat-sys-on-primary)]"
-                [attr.aria-current]="'page'"
-                [attr.aria-label]="
-                  'users.list.pagination.currentPageAria' | transloco: { page: pageNumber }
-                "
-              >
-                {{ pageNumber }}
-              </button>
-            } @else {
-              <button
-                type="button"
-                (click)="goToPage(pageNumber)"
-                class="rounded-lg border border-[var(--mat-sys-outline-variant)] px-3 py-2 text-sm font-medium transition hover:bg-[var(--mat-sys-surface-container)]"
-                [attr.aria-label]="
-                  'users.list.pagination.goToPageAria' | transloco: { page: pageNumber }
-                "
-              >
-                {{ pageNumber }}
-              </button>
-            }
-          }
-
-          <button
-            type="button"
-            (click)="goToNextPage()"
-            [disabled]="!canGoNext()"
-            class="rounded-lg border border-[var(--mat-sys-outline-variant)] px-3 py-2 text-sm font-medium transition hover:bg-[var(--mat-sys-surface-container)] disabled:cursor-not-allowed disabled:opacity-50"
-            [attr.aria-label]="'users.list.pagination.nextAria' | transloco"
-          >
-            {{ 'common.actions.next' | transloco }}
-          </button>
+          <div class="flex items-center gap-2">
+            <label
+              for="perPage"
+              class="text-sm font-medium text-slate-700 dark:text-slate-300"
+            >
+              {{ 'users.list.perPage' | transloco }}
+            </label>
+            <select
+              id="perPage"
+              [value]="perPage()"
+              (change)="onPerPageChange($event)"
+              [disabled]="isLoading()"
+              class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-[#415582] dark:bg-[#1a2442] dark:text-slate-100 dark:hover:bg-[#24355c]"
+              [attr.aria-label]="'users.list.perPageAria' | transloco"
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
         </div>
 
-        @if (support(); as supportInfo) {
+        <!-- @if (support(); as supportInfo) {
           <a
             [href]="supportInfo.url"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-xs text-[var(--mat-sys-on-surface-variant)] underline decoration-[var(--mat-sys-outline)] underline-offset-2 hover:text-[var(--mat-sys-primary)]"
+            class="text-xs text-slate-500 underline decoration-slate-400 underline-offset-2 hover:text-[#cb7a5d] dark:text-[#a8b6d8] dark:decoration-[#6d7fa9] dark:hover:text-[#f1b39a]"
           >
             {{ supportInfo.text }}
           </a>
-        }
+        } -->
       </footer>
     </div>
   </section>

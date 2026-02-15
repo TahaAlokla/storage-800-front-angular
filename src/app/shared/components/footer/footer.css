@@ -1,0 +1,23 @@
+footer {
+  margin-top: auto;
+  box-shadow: 0 -1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+footer p {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+footer span {
+  display: inline-block;
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}

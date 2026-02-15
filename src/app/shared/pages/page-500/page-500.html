@@ -1,26 +1,26 @@
 <main
-  class="min-h-[calc(100vh-0px)] flex items-center justify-center px-6 bg-[var(--mat-sys-surface)] text-[var(--mat-sys-on-surface)]"
+  class="min-h-[calc(100vh-0px)] flex items-center justify-center bg-slate-50 px-6 text-slate-900 dark:bg-[#121a2f] dark:text-slate-100"
 >
   <section class="w-full max-w-xl text-center">
     <div
-      class="rounded-2xl bg-[var(--mat-sys-surface-container-low)] px-6 py-10 shadow-sm ring-1 ring-[var(--mat-sys-outline-variant)]"
+      class="rounded-2xl bg-white px-6 py-10 shadow-sm ring-1 ring-slate-200 dark:bg-[#1a2442] dark:ring-[#313f63] dark:shadow-[0_18px_36px_rgba(0,0,0,0.28)]"
     >
-      <p class="text-sm font-medium text-[var(--mat-sys-on-surface-variant)]">
+      <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
         {{ 'errors.500.code' | transloco }}
       </p>
 
-      <h1 class="mt-2 text-3xl font-semibold tracking-tight text-[var(--mat-sys-on-surface)]">
+      <h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
         {{ 'errors.500.title' | transloco }}
       </h1>
 
-      <p class="mt-3 text-base leading-relaxed text-[var(--mat-sys-on-surface-variant)]">
+      <p class="mt-3 text-base leading-relaxed text-slate-600 dark:text-slate-400">
         {{ 'errors.500.description' | transloco }}
       </p>
 
       <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
         <a
           [routerLink]="['/']"
-          class="inline-flex items-center justify-center rounded-xl bg-[var(--mat-sys-primary)] px-5 py-3 text-sm font-semibold text-[var(--mat-sys-on-primary)] transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--mat-sys-primary)]"
+          class="inline-flex items-center justify-center rounded-xl bg-[#d98667] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#cb7a5d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d98667]"
         >
           {{ 'errors.500.actions.home' | transloco }}
         </a>
@@ -28,13 +28,13 @@
         <button
           type="button"
           (click)="goBack()"
-          class="inline-flex items-center justify-center rounded-xl bg-[var(--mat-sys-surface-container)] px-5 py-3 text-sm font-semibold text-[var(--mat-sys-on-surface)] ring-1 ring-[var(--mat-sys-outline-variant)] transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--mat-sys-primary)]"
+          class="inline-flex items-center justify-center rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 ring-1 ring-slate-200 transition hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d98667] dark:bg-[#24355c] dark:text-slate-100 dark:ring-[#415582] dark:hover:bg-[#2d416d]"
         >
           {{ 'errors.500.actions.back' | transloco }}
         </button>
       </div>
 
-      <div class="mt-8 text-xs text-[var(--mat-sys-outline)]">
+      <div class="mt-8 text-xs text-slate-500 dark:text-slate-400">
         {{ 'errors.500.hint' | transloco }}
       </div>
     </div>

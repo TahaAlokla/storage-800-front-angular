@@ -47,6 +47,8 @@
 }
 
 :host-context(.dark) .theme-toggle-btn {
-  background-color: #e0e0e0;
-  color: black;
+  background-color: #24355c;
+  color: #f1c8b8;
+  border: 1px solid #415582;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
 }
