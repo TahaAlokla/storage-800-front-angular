@@ -37,20 +37,6 @@ export class UsersList {
   readonly usersResponse = signal<UsersListResponse | null>(null);
 
   readonly users = computed(() => this.usersResponse()?.data ?? []);
-  readonly searchQuery = computed(() => this.userService.listSearchQuery().trim());
-  readonly filteredUsers = computed(() => {
-    const query = this.searchQuery();
-    if (query.length === 0) {
-      return this.users();
-    }
-
-    if (!/^\d+$/.test(query)) {
-      return [];
-    }
-
-    const id = Number(query);
-    return this.users().filter((user) => user.id === id);
-  });
   readonly total = computed(() => this.usersResponse()?.total ?? 0);
   readonly totalPages = computed(() => this.usersResponse()?.total_pages ?? 1);
   readonly currentPage = computed(() => this.usersResponse()?.page ?? this.page());

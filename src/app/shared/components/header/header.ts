@@ -8,16 +8,14 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
 import {
   EMPTY,
   catchError,
   debounceTime,
   distinctUntilChanged,
-  filter,
   map,
-  startWith,
   switchMap,
   tap,
 } from 'rxjs';
@@ -41,33 +39,10 @@ export class Header {
   readonly searchInput = signal('');
   readonly searchState = signal<SearchState>('idle');
   readonly searchResult = signal<ReqResUser | null>(null);
-  readonly isUsersListPage = signal(false);
   readonly hasSearchInput = computed(() => this.searchInput().trim().length > 0);
-  readonly showSearchPanel = computed(
-    () => !this.isUsersListPage() && this.hasSearchInput() && this.searchState() !== 'idle'
-  );
+  readonly showSearchPanel = computed(() => this.hasSearchInput() && this.searchState() !== 'idle');
 
   constructor() {
-    this.router.events
-      .pipe(
-        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        startWith(null),
-        map(() => this.router.url.split('?')[0]),
-        tap((url) => {
-          const isListPage = url === '/users' || url === '/users/';
-          this.isUsersListPage.set(isListPage);
-
-          if (!isListPage) {
-            this.userService.clearListSearchQuery();
-          }
-
-          this.searchResult.set(null);
-          this.searchState.set('idle');
-        }),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe();
-
     toObservable(this.searchInput)
       .pipe(
         map((value) => value.trim()),
@@ -77,15 +52,7 @@ export class Header {
           this.searchResult.set(null);
           this.searchState.set('idle');
         }),
-        switchMap((value) => {
-          if (this.isUsersListPage()) {
-            this.userService.setListSearchQuery(value);
-            return EMPTY;
-          }
-
-          this.userService.clearListSearchQuery();
-          return this.searchUserById(value);
-        }),
+        switchMap((value) => this.searchUserById(value)),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
@@ -97,10 +64,6 @@ export class Header {
   }
 
   onSearchEnter(event: Event): void {
-    if (this.isUsersListPage()) {
-      return;
-    }
-
     const user = this.searchResult();
     if (!user) {
       return;

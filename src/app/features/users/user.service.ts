@@ -2,8 +2,8 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { inject, Injectable, signal } from '@angular/core';
 import { ENDPOINTS } from '@constants/app.endpoints.constants';
 import { environment } from '@env/environment';
-import { catchError, Observable, shareReplay, throwError } from 'rxjs';
-import { UserDetailsResponse, UsersListResponse } from './user.types';
+import { catchError, map, Observable, of, shareReplay, throwError } from 'rxjs';
+import { ReqResUser, UserDetailsResponse, UsersListResponse } from './user.types';
 
 @Injectable({
   providedIn: 'root',
@@ -12,10 +12,10 @@ export class UserService {
   private readonly http = inject(HttpClient);
   private readonly usersCache = new Map<string, Observable<UsersListResponse>>();
   private readonly userDetailsCache = new Map<string, Observable<UserDetailsResponse>>();
+  private readonly userEntityCache = new Map<number, ReqResUser>();
 
   readonly listPage = signal(1);
   readonly listPerPage = signal(10);
-  readonly listSearchQuery = signal('');
 
   setListPage(page: number): void {
     this.listPage.set(page);
@@ -23,14 +23,6 @@ export class UserService {
 
   setListPerPage(perPage: number): void {
     this.listPerPage.set(perPage);
-  }
-
-  setListSearchQuery(query: string): void {
-    this.listSearchQuery.set(query);
-  }
-
-  clearListSearchQuery(): void {
-    this.listSearchQuery.set('');
   }
 
   getUsers(page = 1, perPage = 6): Observable<UsersListResponse> {
@@ -48,6 +40,10 @@ export class UserService {
       `${environment.apiUrl}${ENDPOINTS.user_list}`,
       { params }
     ).pipe(
+      map((response) => {
+        this.cacheUsers(response.data);
+        return response;
+      }),
       shareReplay({ bufferSize: 1, refCount: false }),
       catchError((error: unknown) => {
         this.usersCache.delete(cacheKey);
@@ -66,9 +62,24 @@ export class UserService {
       return cachedResponse;
     }
 
+    const parsedId = Number(normalizedId);
+    if (Number.isInteger(parsedId) && this.userEntityCache.has(parsedId)) {
+      return of({
+        data: this.userEntityCache.get(parsedId)!,
+        support: {
+          url: '',
+          text: '',
+        },
+      });
+    }
+
     const request$ = this.http.get<UserDetailsResponse>(
       `${environment.apiUrl}${ENDPOINTS.user_details.replace(':id', id.toString())}`
     ).pipe(
+      map((response) => {
+        this.userEntityCache.set(response.data.id, response.data);
+        return response;
+      }),
       shareReplay({ bufferSize: 1, refCount: false }),
       catchError((error: unknown) => {
         if (!(error instanceof HttpErrorResponse) || error.status !== 404) {
@@ -81,5 +92,11 @@ export class UserService {
 
     this.userDetailsCache.set(normalizedId, request$);
     return request$;
+  }
+
+  private cacheUsers(users: ReqResUser[]): void {
+    for (const user of users) {
+      this.userEntityCache.set(user.id, user);
+    }
   }
 }

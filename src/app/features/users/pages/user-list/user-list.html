@@ -42,13 +42,13 @@
           ></app-loading-skeleton>
           <p class="sr-only">{{ 'users.list.loading' | transloco }}</p>
         </div>
-      } @else if (filteredUsers().length === 0) {
+      } @else if (users().length === 0) {
         <div class="p-8 text-center text-sm text-slate-600 dark:text-slate-400">
           {{ 'users.list.empty' | transloco }}
         </div>
       } @else {
         <div class="grid gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
-          @for (user of filteredUsers(); track trackUserById($index, user)) {
+          @for (user of users(); track trackUserById($index, user)) {
             <app-user-card [user]="user"></app-user-card>
           }
         </div>

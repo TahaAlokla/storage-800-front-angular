@@ -362,3 +362,59 @@ Main contracts:
 - If you change translation keys, update both language files
 - If you re-enable footer rendering, uncomment it in `src/app/app.html`
 - Current build may warn about `Footer` import in `src/app/app.ts` because the template does not render it
+
+## 16. Git Notes
+
+### Recommended branch workflow
+
+- Create a feature branch from `main`:
+
+```bash
+git checkout main
+git pull
+git checkout -b feat/<short-topic>
+```
+
+- Keep commits small and focused (one logical change per commit).
+- Rebase or merge `main` frequently to avoid large conflicts.
+
+### Commit message convention (recommended)
+
+Use a simple Conventional Commits style:
+
+- `feat: ...` for new features
+- `fix: ...` for bug fixes
+- `refactor: ...` for non-functional internal changes
+- `docs: ...` for README/documentation updates
+- `style: ...` for formatting-only changes
+- `test: ...` for tests
+
+Examples:
+
+```text
+feat: add instant header user search with cache-first lookup
+fix: preserve users list pagination state when returning from details
+docs: add architecture and services report to README
+```
+
+### Typical local flow
+
+```bash
+git status
+git add .
+git commit -m "feat: your message"
+git push -u origin <branch-name>
+```
+
+### Pull request checklist
+
+- Build passes locally (`npm run build`)
+- No unrelated files included in the PR
+- Translation keys updated in both `en.json` and `ar.json` when needed
+- README updated if architecture or behavior changed
+
+### Repository hygiene
+
+- Do not commit `node_modules/` or build artifacts in `dist/`
+- Keep secrets out of commits (API keys/tokens should be managed securely)
+- Avoid force-push to shared branches unless explicitly agreed
