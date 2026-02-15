@@ -24,6 +24,18 @@
       "ofLabel": "of"
     }
   },
+  "header": {
+    "subtitle": "User Management",
+    "search": {
+      "label": "Search user by ID",
+      "placeholder": "Search user by ID...",
+      "loading": "Searching user...",
+      "invalidId": "Enter a valid numeric user ID.",
+      "notFound": "No user found with this ID.",
+      "error": "Unable to search right now. Please try again.",
+      "openDetails": "Open details"
+    }
+  },
   "users": {
     "list": {
       "title": "Users",
@@ -32,6 +44,8 @@
       "noRecords": "No records",
       "loading": "Loading users...",
       "empty": "No users found.",
+      "perPage": "Items per page",
+      "perPageAria": "Select items per page",
       "errors": {
         "loadFailed": "Unable to load users. Please try again."
       },

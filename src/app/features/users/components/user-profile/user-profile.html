@@ -1,1 +1,23 @@
-<p>user-profile works!</p>
+@if (user(); as userInfo) {
+  <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
+    <img
+      [ngSrc]="userInfo.avatar"
+      width="112"
+      height="112"
+      [alt]="userInfo.first_name + ' ' + userInfo.last_name"
+      class="h-28 w-28 rounded-full object-cover ring-2 ring-slate-200 dark:ring-[#3b4f7a]"
+    />
+
+    <div class="min-w-0">
+      <h2 class="text-xl font-semibold">
+        {{ userInfo.first_name }} {{ userInfo.last_name }}
+      </h2>
+      <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
+        {{ 'users.details.labels.id' | transloco }}: {{ userInfo.id }}
+      </p>
+      <p class="mt-1 break-all text-sm text-slate-600 dark:text-slate-400">
+        {{ 'users.details.labels.email' | transloco }}: {{ userInfo.email }}
+      </p>
+    </div>
+  </div>
+}

@@ -1,7 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
-
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 @import "./styles/splash-screen.css";
+
 :root {
   --color-primary: #e56333;
   --color-secondary: #122247;
@@ -13,4 +15,13 @@
   --mat-sys-on-tertiary: #ffffff;
   font-family: 'Exo 2', sans-serif;
 }
-@import "tailwindcss";
+
+.app-page-shell {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.dark .app-page-shell {
+  background-color: #121a2f;
+  color: #f1f5f9;
+}
