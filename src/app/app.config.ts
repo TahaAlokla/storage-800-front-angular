@@ -7,7 +7,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideEnvironmentInitializer,
 } from '@angular/core';
-import { provideRouter, withViewTransitions } from '@angular/router';
+import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
 import { provideTransloco, TranslocoService } from '@jsverse/transloco';
 import { routes } from './app.routes';
 import { TranslocoHttpLoader } from '@core/transloco-loader';
@@ -19,11 +19,10 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { LoadingInterceptor } from '@core/interceptors/loading.interceptor';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 
-
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes, withViewTransitions()),
+    provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
     provideHttpClient(withInterceptors([LoadingInterceptor, authInterceptor])),
     provideEnvironmentInitializer(() => {
       inject(SplashScreenService);
@@ -49,5 +48,5 @@ export const appConfig: ApplicationConfig = {
       loader: TranslocoHttpLoader,
     }),
     { provide: MatPaginatorIntl, useClass: TranslocoPaginatorIntlService },
-  ]
+  ],
 };

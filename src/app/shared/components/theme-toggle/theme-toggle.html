@@ -1,12 +1,7 @@
 <button
   mat-mini-fab
-  class="theme-toggle-btn hover:translate-y-[1px] duration-500 ease-in-out"
+  class="theme-toggle-btn duration-500 ease-in-out"
   (click)="themeService.toggleTheme()"
-  [attr.aria-label]="
-    themeService.isDarkMode()
-      ? ('common.theme.switchToLight' | transloco)
-      : ('common.theme.switchToDark' | transloco)
-  "
 >
   <mat-icon>{{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
 </button>

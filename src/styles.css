@@ -15,3 +15,13 @@
   --mat-sys-on-tertiary: #ffffff;
   font-family: 'Exo 2', sans-serif;
 }
+
+.app-page-shell {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.dark .app-page-shell {
+  background-color: #121a2f;
+  color: #f1f5f9;
+}

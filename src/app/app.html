@@ -1,7 +1,9 @@
 <div class="flex min-h-screen flex-col">
   <app-header></app-header>
   <loading-bar />
-  <router-outlet />
+  <main class="app-page-shell flex-1">
+    <router-outlet />
+  </main>
   <!-- <app-footer></app-footer> -->
   <theme-toggle />
   <lang-toggle />

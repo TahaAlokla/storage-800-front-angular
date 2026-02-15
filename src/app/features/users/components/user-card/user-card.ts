@@ -12,5 +12,5 @@ import { TranslocoModule } from '@jsverse/transloco';
   styleUrl: './user-card.css',
 })
 export class UserCard {
-  user = input<ReqResUser | null>(null);
+  user = input.required<ReqResUser>();
 }

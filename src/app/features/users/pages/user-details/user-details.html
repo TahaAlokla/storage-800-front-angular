@@ -1,14 +1,14 @@
-<main
-  class="min-h-[calc(100vh-0px)] bg-slate-50 px-4 py-6 text-slate-900 dark:bg-[#121a2f] dark:text-slate-100 sm:px-6"
->
+<main class="px-4 py-6 sm:px-6">
   <section class="mx-auto w-full max-w-3xl">
     <div class="mb-6 flex items-center justify-between gap-3">
       <div>
-        <h1 class="text-2xl font-semibold tracking-tight">{{ 'users.details.title' | transloco }}</h1>
+        <h1 class="text-2xl font-semibold tracking-tight">
+          {{ 'users.details.title' | transloco }}
+        </h1>
         <p class="text-sm text-slate-600 dark:text-slate-300">
           {{
             'users.details.subtitle'
-              | transloco: { id: userId() ?? ('users.details.unknownId' | transloco) }
+              | transloco: { id: id() ?? ('users.details.unknownId' | transloco) }
           }}
         </p>
       </div>
@@ -36,29 +36,9 @@
     >
       @if (isLoading()) {
         <app-loading-skeleton [type]="loadingSkeletonType.UserDetails"></app-loading-skeleton>
-        <p class="sr-only">{{ 'users.details.loading' | transloco }}</p>
+      
       } @else if (user(); as userInfo) {
-        <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
-          <img
-            [ngSrc]="userInfo.avatar"
-            width="112"
-            height="112"
-            [alt]="userInfo.first_name + ' ' + userInfo.last_name"
-            class="h-28 w-28 rounded-full object-cover ring-2 ring-slate-200 dark:ring-[#3b4f7a]"
-          />
-
-          <div class="min-w-0">
-            <h2 class="text-xl font-semibold">
-              {{ userInfo.first_name }} {{ userInfo.last_name }}
-            </h2>
-            <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              {{ 'users.details.labels.id' | transloco }}: {{ userInfo.id }}
-            </p>
-            <p class="mt-1 break-all text-sm text-slate-600 dark:text-slate-400">
-              {{ 'users.details.labels.email' | transloco }}: {{ userInfo.email }}
-            </p>
-          </div>
-        </div>
+        <app-user-profile [user]="userInfo"></app-user-profile>
       } @else {
         <p class="text-sm text-slate-600 dark:text-slate-400">
           {{ 'users.details.empty' | transloco }}
