@@ -1,3 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 
+
+@import "./styles/splash-screen.css";
+:root {
+  --color-primary: #e56333;
+  --color-secondary: #122247;
+  --mat-sys-primary: #e56333;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-secondary: #122247;
+  --mat-sys-on-secondary: #ffffff;
+  --mat-sys-tertiary: #122247;
+  --mat-sys-on-tertiary: #ffffff;
+  font-family: 'Exo 2', sans-serif;
+}
 @import "tailwindcss";

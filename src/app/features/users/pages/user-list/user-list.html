@@ -1,0 +1,121 @@
+<main
+  class="min-h-[calc(100vh-0px)] bg-[var(--mat-sys-surface)] px-4 py-6 text-[var(--mat-sys-on-surface)] sm:px-6"
+>
+  <section class="mx-auto w-full max-w-6xl">
+    <header class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h1 class="text-2xl font-semibold tracking-tight">{{ 'users.list.title' | transloco }}</h1>
+        <p class="text-sm text-[var(--mat-sys-on-surface-variant)]">
+          {{ 'users.list.subtitle' | transloco }}
+        </p>
+      </div>
+
+      <p class="text-sm text-[var(--mat-sys-on-surface-variant)]">
+        @if (total() > 0) {
+          {{
+            'users.list.summary'
+              | transloco: { start: startItem(), end: endItem(), total: total() }
+          }}
+        } @else {
+          {{ 'users.list.noRecords' | transloco }}
+        }
+      </p>
+    </header>
+
+    @if (errorMessage()) {
+      <div
+        class="mb-4 rounded-xl border border-[var(--mat-sys-error)] bg-[var(--mat-sys-surface-container)] px-4 py-3 text-sm text-[var(--mat-sys-error)]"
+        role="alert"
+      >
+        {{ errorMessage()! | transloco }}
+      </div>
+    }
+
+    <div
+      class="rounded-2xl border border-[var(--mat-sys-outline-variant)] bg-[var(--mat-sys-surface-container-low)] shadow-sm"
+    >
+      @if (isLoading()) {
+        <div class="p-8 text-center text-sm text-[var(--mat-sys-on-surface-variant)]">
+          {{ 'users.list.loading' | transloco }}
+        </div>
+      } @else if (users().length === 0) {
+        <div class="p-8 text-center text-sm text-[var(--mat-sys-on-surface-variant)]">
+          {{ 'users.list.empty' | transloco }}
+        </div>
+      } @else {
+        <div class="grid gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
+          @for (user of users(); track trackUserById($index, user)) {
+            <app-user-card [user]="user"></app-user-card>
+          }
+        </div>
+      }
+
+      <footer
+        class="flex flex-col gap-4 border-t border-[var(--mat-sys-outline-variant)] px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div
+          class="flex items-center gap-2"
+          role="navigation"
+          [attr.aria-label]="'users.list.pagination.navAria' | transloco"
+        >
+          <button
+            type="button"
+            (click)="goToPreviousPage()"
+            [disabled]="!canGoPrevious()"
+            class="rounded-lg border border-[var(--mat-sys-outline-variant)] px-3 py-2 text-sm font-medium transition hover:bg-[var(--mat-sys-surface-container)] disabled:cursor-not-allowed disabled:opacity-50"
+            [attr.aria-label]="'users.list.pagination.previousAria' | transloco"
+          >
+            {{ 'common.actions.previous' | transloco }}
+          </button>
+
+          @for (pageNumber of pageNumbers(); track trackPage($index, pageNumber)) {
+            @if (pageNumber === currentPage()) {
+              <button
+                type="button"
+                class="rounded-lg bg-[var(--mat-sys-primary)] px-3 py-2 text-sm font-semibold text-[var(--mat-sys-on-primary)]"
+                [attr.aria-current]="'page'"
+                [attr.aria-label]="
+                  'users.list.pagination.currentPageAria' | transloco: { page: pageNumber }
+                "
+              >
+                {{ pageNumber }}
+              </button>
+            } @else {
+              <button
+                type="button"
+                (click)="goToPage(pageNumber)"
+                class="rounded-lg border border-[var(--mat-sys-outline-variant)] px-3 py-2 text-sm font-medium transition hover:bg-[var(--mat-sys-surface-container)]"
+                [attr.aria-label]="
+                  'users.list.pagination.goToPageAria' | transloco: { page: pageNumber }
+                "
+              >
+                {{ pageNumber }}
+              </button>
+            }
+          }
+
+          <button
+            type="button"
+            (click)="goToNextPage()"
+            [disabled]="!canGoNext()"
+            class="rounded-lg border border-[var(--mat-sys-outline-variant)] px-3 py-2 text-sm font-medium transition hover:bg-[var(--mat-sys-surface-container)] disabled:cursor-not-allowed disabled:opacity-50"
+            [attr.aria-label]="'users.list.pagination.nextAria' | transloco"
+          >
+            {{ 'common.actions.next' | transloco }}
+          </button>
+        </div>
+
+        @if (support(); as supportInfo) {
+          <a
+            [href]="supportInfo.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-xs text-[var(--mat-sys-on-surface-variant)] underline decoration-[var(--mat-sys-outline)] underline-offset-2 hover:text-[var(--mat-sys-primary)]"
+          >
+            {{ supportInfo.text }}
+          </a>
+        }
+      </footer>
+    </div>
+  </section>
+</main>

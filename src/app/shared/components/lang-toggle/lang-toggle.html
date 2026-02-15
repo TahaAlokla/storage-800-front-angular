@@ -1,0 +1,12 @@
+<button
+  mat-mini-fab
+  class="language-toggle-btn"
+  (click)="toggleLanguage()"
+  [attr.aria-label]="
+    activeLang() === 'ar'
+      ? ('common.language.switchToEnglish' | transloco)
+      : ('common.language.switchToArabic' | transloco)
+  "
+>
+  <span class="lang-label">{{ activeLang() === 'ar' ? 'EN' : 'AR' }}</span>
+</button>

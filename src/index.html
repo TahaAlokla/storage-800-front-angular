@@ -1,17 +1,64 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Storage-800</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
-<body>
-  <app-root></app-root>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Storage-800</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (() => {
+        try {
+          const savedLang = localStorage.getItem('lang');
+          const lang = savedLang === 'ar' ? 'ar' : 'en';
+          const root = document.documentElement;
+
+          root.lang = lang;
+          root.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+          const savedTheme = localStorage.getItem('theme');
+          const isDarkMode = savedTheme
+            ? savedTheme === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+          root.classList.toggle('dark', isDarkMode);
+          root.style.colorScheme = isDarkMode ? 'dark' : 'light';
+        } catch {
+          document.documentElement.style.colorScheme = 'light';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <splash-screen
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      aria-label="Application is loading"
+    >
+      <div class="splash-shell">
+        <div class="logo-mark" aria-hidden="true">
+          <span class="icon">inventory_2</span>
+        </div>
+        <h1 class="title">Storage 800</h1>
+        <p class="subtitle">Loading your workspace...</p>
+        <div class="progress-track" aria-hidden="true">
+          <span class="progress-indicator"></span>
+        </div>
+        <p class="sr-only">Please wait while the app loads.</p>
+      </div>
+    </splash-screen>
+    <app-root></app-root>
+  </body>
 </html>

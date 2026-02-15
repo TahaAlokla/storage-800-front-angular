@@ -1,0 +1,70 @@
+<main
+  class="min-h-[calc(100vh-0px)] bg-[var(--mat-sys-surface)] px-4 py-6 text-[var(--mat-sys-on-surface)] sm:px-6"
+>
+  <section class="mx-auto w-full max-w-3xl">
+    <div class="mb-6 flex items-center justify-between gap-3">
+      <div>
+        <h1 class="text-2xl font-semibold tracking-tight">{{ 'users.details.title' | transloco }}</h1>
+        <p class="text-sm text-[var(--mat-sys-on-surface-variant)]">
+          {{
+            'users.details.subtitle'
+              | transloco: { id: userId() ?? ('users.details.unknownId' | transloco) }
+          }}
+        </p>
+      </div>
+
+      <button
+        type="button"
+        (click)="goBack()"
+        class="inline-flex rounded-lg border border-[var(--mat-sys-outline-variant)] px-3 py-2 text-sm font-medium transition hover:bg-[var(--mat-sys-surface-container)]"
+      >
+        {{ 'common.actions.back' | transloco }}
+      </button>
+    </div>
+
+    @if (errorKey()) {
+      <div
+        class="mb-4 rounded-xl border border-[var(--mat-sys-error)] bg-[var(--mat-sys-surface-container)] px-4 py-3 text-sm text-[var(--mat-sys-error)]"
+        role="alert"
+      >
+        {{ errorKey()! | transloco }}
+      </div>
+    }
+
+    <div
+      class="rounded-2xl border border-[var(--mat-sys-outline-variant)] bg-[var(--mat-sys-surface-container-low)] p-5 shadow-sm"
+    >
+      @if (isLoading()) {
+        <p class="text-sm text-[var(--mat-sys-on-surface-variant)]">
+          {{ 'users.details.loading' | transloco }}
+        </p>
+      } @else if (user(); as userInfo) {
+        <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
+          <img
+            [ngSrc]="userInfo.avatar"
+            width="112"
+            height="112"
+            [alt]="userInfo.first_name + ' ' + userInfo.last_name"
+            class="h-28 w-28 rounded-full object-cover ring-2 ring-[var(--mat-sys-outline-variant)]"
+          />
+
+          <div class="min-w-0">
+            <h2 class="text-xl font-semibold">
+              {{ userInfo.first_name }} {{ userInfo.last_name }}
+            </h2>
+            <p class="mt-1 text-sm text-[var(--mat-sys-on-surface-variant)]">
+              {{ 'users.details.labels.id' | transloco }}: {{ userInfo.id }}
+            </p>
+            <p class="mt-1 break-all text-sm text-[var(--mat-sys-on-surface-variant)]">
+              {{ 'users.details.labels.email' | transloco }}: {{ userInfo.email }}
+            </p>
+          </div>
+        </div>
+      } @else {
+        <p class="text-sm text-[var(--mat-sys-on-surface-variant)]">
+          {{ 'users.details.empty' | transloco }}
+        </p>
+      }
+    </div>
+  </section>
+</main>

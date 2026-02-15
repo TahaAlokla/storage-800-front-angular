@@ -1,0 +1,32 @@
+@if (user(); as userInfo) {
+  <article
+    class="rounded-xl border border-[var(--mat-sys-outline-variant)] bg-[var(--mat-sys-surface)] p-4 transition hover:shadow-md"
+  >
+    <div class="mb-3 flex items-center gap-3">
+      <img
+        [ngSrc]="userInfo.avatar"
+        width="48"
+        height="48"
+        class="h-12 w-12 rounded-full object-cover ring-1 ring-[var(--mat-sys-outline-variant)]"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        [alt]="userInfo.first_name + ' ' + userInfo.last_name"
+      />
+      <div class="min-w-0">
+        <h2 class="truncate text-base font-semibold">
+          {{ userInfo.first_name }} {{ userInfo.last_name }}
+        </h2>
+        <p class="truncate text-sm text-[var(--mat-sys-on-surface-variant)]">
+          {{ userInfo.email || ('users.card.noEmail' | transloco) }}
+        </p>
+      </div>
+    </div>
+
+    <a
+      [routerLink]="['/users', userInfo.id]"
+      class="inline-flex rounded-lg bg-[var(--mat-sys-primary)] px-3 py-2 text-sm font-medium text-[var(--mat-sys-on-primary)] transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--mat-sys-primary)]"
+    >
+      {{ 'users.card.viewDetails' | transloco }}
+    </a>
+  </article>
+}

@@ -1,0 +1,88 @@
+{
+  "common": {
+    "actions": {
+      "home": "Go home",
+      "back": "Go back",
+      "retry": "Retry",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "theme": {
+      "switchToLight": "Switch to light mode",
+      "switchToDark": "Switch to dark mode"
+    },
+    "language": {
+      "switchToEnglish": "Switch to English",
+      "switchToArabic": "Switch to Arabic"
+    },
+    "paginator": {
+      "itemsPerPageLabel": "Items per page",
+      "nextPageLabel": "Next page",
+      "previousPageLabel": "Previous page",
+      "firstPageLabel": "First page",
+      "lastPageLabel": "Last page",
+      "ofLabel": "of"
+    }
+  },
+  "users": {
+    "list": {
+      "title": "Users",
+      "subtitle": "Browse all users from the paginated API response.",
+      "summary": "Showing {{start}}-{{end}} of {{total}}",
+      "noRecords": "No records",
+      "loading": "Loading users...",
+      "empty": "No users found.",
+      "errors": {
+        "loadFailed": "Unable to load users. Please try again."
+      },
+      "pagination": {
+        "navAria": "Users pagination",
+        "previousAria": "Go to previous page",
+        "nextAria": "Go to next page",
+        "goToPageAria": "Go to page {{page}}",
+        "currentPageAria": "Current page, page {{page}}"
+      }
+    },
+    "card": {
+      "noEmail": "No email available",
+      "viewDetails": "View details"
+    },
+    "details": {
+      "title": "User details",
+      "subtitle": "Profile information for user #{{id}}",
+      "unknownId": "Unknown",
+      "loading": "Loading user details...",
+      "empty": "User not found.",
+      "errors": {
+        "loadFailed": "Unable to load user details. Please try again."
+      },
+      "labels": {
+        "id": "ID",
+        "email": "Email"
+      }
+    }
+  },
+  "errors": {
+    "404": {
+      "code": "Error 404",
+      "title": "Page not found",
+      "description": "The link may be incorrect, or the page has been moved or deleted.",
+      "actions": {
+        "home": "Go home",
+        "back": "Go back"
+      },
+      "hint": "If you think this is a mistake, please contact support."
+    },
+    "500": {
+      "code": "Error 500",
+      "title": "Something went wrong",
+      "description": "An unexpected server error occurred while processing your request.",
+      "actions": {
+        "home": "Go home",
+        "back": "Go back",
+        "retry": "Try again"
+      },
+      "hint": "If the issue continues, please contact support."
+    }
+  }
+}

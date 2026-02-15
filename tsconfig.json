@@ -24,7 +24,13 @@
       ],
       "@shared/*": [
         "app/shared/*"
-      ]
+      ],
+      "@env/*": [
+        "environments/*"
+      ],
+      "@constants/*": [
+        "app/constants/*"
+      ],
     }
   },
   "angularCompilerOptions": {
