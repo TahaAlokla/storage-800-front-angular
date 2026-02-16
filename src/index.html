@@ -17,28 +17,7 @@
       href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
-    <script>
-      (() => {
-        try {
-          const savedLang = localStorage.getItem('lang');
-          const lang = savedLang === 'ar' ? 'ar' : 'en';
-          const root = document.documentElement;
-
-          root.lang = lang;
-          root.dir = lang === 'ar' ? 'rtl' : 'ltr';
-
-          const savedTheme = localStorage.getItem('theme');
-          const isDarkMode = savedTheme
-            ? savedTheme === 'dark'
-            : window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-          root.classList.toggle('dark', isDarkMode);
-          root.style.colorScheme = isDarkMode ? 'dark' : 'light';
-        } catch {
-          document.documentElement.style.colorScheme = 'light';
-        }
-      })();
-    </script>
+   
   </head>
   <body>
     <splash-screen

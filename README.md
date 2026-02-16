@@ -140,29 +140,31 @@ Responsibilities:
 
 - Fetch users list (`getUsers`)
 - Fetch single user (`getUserById`)
-- Keep shared UI state for list page and header search
+- Keep shared UI state for users list pagination
 - Cache API responses to avoid duplicate requests
 
 State signals:
 
 - `listPage`
 - `listPerPage`
-- `listSearchQuery`
 
 State methods:
 
 - `setListPage(page)`
 - `setListPerPage(perPage)`
-- `setListSearchQuery(query)`
-- `clearListSearchQuery()`
 
 Caching strategy:
 
 - List cache key = `${page}:${perPage}`
 - Details cache key = normalized `id`
+- Entity cache for users indexed by user id
 - Uses `shareReplay({ bufferSize: 1, refCount: false })`
 - List errors clear list cache entry
 - Details errors clear cache entry except `404` (404 remains cached)
+- `getUserById` lookup order:
+  - details request cache
+  - entity cache from previously loaded list/details data
+  - backend request as fallback
 
 ### 7.2 `LoadingService`
 
@@ -258,7 +260,6 @@ File: `src/app/features/users/pages/user-list/user-list.ts`
 - Displays skeleton while loading
 - Handles API failure state
 - Uses computed pagination helpers (`totalPages`, `startItem`, `endItem`)
-- Applies in-page filter by ID from `listSearchQuery`
 - Keeps pagination state when navigating away and back
 
 ### 9.2 Users Details Page
@@ -279,8 +280,9 @@ Files:
 
 Behavior:
 
-- On `/users` page: search field updates `UserService.listSearchQuery` to filter list cards
-- On non-list pages: search performs instant API lookup by ID with debounce
+- Header search performs instant user-id lookup with debounce on all pages
+- Lookup is cache-first through `UserService.getUserById`
+- If user is not in cache, search falls back to backend request
 - Supports loading, invalid, not found, and error states
 - Allows direct navigation to details page from search result
 
@@ -340,7 +342,6 @@ The project uses a hybrid model:
 - Simple shared state currently centralized in `UserService` for:
   - current list page
   - current per-page value
-  - current list search query
 
 ## 14. Data Contracts
 
@@ -363,58 +364,30 @@ Main contracts:
 - If you re-enable footer rendering, uncomment it in `src/app/app.html`
 - Current build may warn about `Footer` import in `src/app/app.ts` because the template does not render it
 
-## 16. Git Notes
+## 16. Project Notes
 
-### Recommended branch workflow
+### 16.1 Search behavior
 
-- Create a feature branch from `main`:
+- Header search is backend-oriented and cache-first.
+- It does not filter users list cards on the client page.
+- Search input accepts numeric user id and handles:
+  - loading
+  - invalid id
+  - not found
+  - backend error
 
-```bash
-git checkout main
-git pull
-git checkout -b feat/<short-topic>
-```
+### 16.2 Users data flow
 
-- Keep commits small and focused (one logical change per commit).
-- Rebase or merge `main` frequently to avoid large conflicts.
+- Users list page fetches data per selected page/per-page values.
+- Returning from details to list keeps the last pagination state.
+- User details route uses component input binding (`id` via `input()`).
 
-### Commit message convention (recommended)
+### 16.3 UI and theme notes
 
-Use a simple Conventional Commits style:
+- Global light/dark page background is applied from `.app-page-shell` in `styles.css`.
+- User details display data is moved to reusable `UserProfile` component.
+- User cards include a visible user-id badge and updated soft styling.
 
-- `feat: ...` for new features
-- `fix: ...` for bug fixes
-- `refactor: ...` for non-functional internal changes
-- `docs: ...` for README/documentation updates
-- `style: ...` for formatting-only changes
-- `test: ...` for tests
+### 16.4 Known current note
 
-Examples:
-
-```text
-feat: add instant header user search with cache-first lookup
-fix: preserve users list pagination state when returning from details
-docs: add architecture and services report to README
-```
-
-### Typical local flow
-
-```bash
-git status
-git add .
-git commit -m "feat: your message"
-git push -u origin <branch-name>
-```
-
-### Pull request checklist
-
-- Build passes locally (`npm run build`)
-- No unrelated files included in the PR
-- Translation keys updated in both `en.json` and `ar.json` when needed
-- README updated if architecture or behavior changed
-
-### Repository hygiene
-
-- Do not commit `node_modules/` or build artifacts in `dist/`
-- Keep secrets out of commits (API keys/tokens should be managed securely)
-- Avoid force-push to shared branches unless explicitly agreed
+- Build may show warning about `Footer` imported in `App` while it is not rendered in `app.html`.
